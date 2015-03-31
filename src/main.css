@@ -114,3 +114,8 @@ html .fc,
 	}
 	
 	
+
+.fcDayContentResource {
+    float:left;
+    height:50px;
+}
