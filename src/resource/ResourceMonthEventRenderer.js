@@ -32,6 +32,9 @@ function ResourceEventMonthRenderer() {
                     var bookingEnd = segment.endHour;
                     var divtop = (resourceDivHeight * (bookingStart - t.dayStart.asHours())) / (t.hoursInDay);
                     var divheight = (resourceDivHeight * (bookingEnd - bookingStart)) / (t.hoursInDay);
+                    if (divheight === 0) {
+                        divheight = 2;
+                    }
                     resourceBookingDivTable.attr("title", event.title + ' - ' + bookingStart + ' - ' + bookingEnd);
                     resourceBookingDivTable.css("top", divtop + "px");
                     resourceBookingDivTable.css("height", divheight + "px");
@@ -56,26 +59,32 @@ function ResourceEventMonthRenderer() {
         
         var mStart = moment(event.start);
         var mEnd = moment(event.end);
+        if (!mEnd.isValid()) {
+            mEnd = moment(mStart).add(2,'hour');
+        }
         if (event.allDay) {
             mEnd = moment(event.start).add(t.dayEnd.asHours(), 'hour');
         }
         var numDays = Math.ceil(moment.duration(mEnd.diff(mStart)).asDays());
+        if (numDays === 0) {
+            numDays = 1;
+        }
         var startDate = moment(mStart).startOf('day');
         
         if (event.resources instanceof Array) {
         
-            event.resources.forEach(function(resource) { // wauhdfiasdnp iucfnapsubnvapdsfiunvb paefinv
+            event.resources.forEach(function(resource) {
                 
                 var resourceIndex = getResourceIndexFromId(resource, t.calendar.options.resources);
-                console.info("resource:" + resource +"; index:"+resourceIndex);
+                //console.info("resource:" + resource +"; index:"+resourceIndex);
                 if (resourceIndex > -1) {
-                    segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate));
+                    segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate, event.allDay));
                 }
             });
             
         } else {
             var resourceIndex = getResourceIndexFromId(event.resources, t.calendar.options.resources);
-            segments = segments.concat(createSegmentsForResource(event.resources, resourceIndex, numDays, mStart, mEnd, startDate));
+            segments = segments.concat(createSegmentsForResource(event.resources, resourceIndex, numDays, mStart, mEnd, startDate, event.allDay));
         }
         return segments;
     }
@@ -90,9 +99,10 @@ function ResourceEventMonthRenderer() {
         return result;
     }
     
-    function createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate) {
+    // creates a segment per resource per day. 
+    function createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate, allDay) {
         var results = [];
-        if (event.allDay) {
+        if (allDay) {
             for (var dayIndex=0;dayIndex<numDays;dayIndex++) {
                 var allDaySegment = {};
                 allDaySegment.date = moment(startDate).add(dayIndex, 'd');
