@@ -22,7 +22,7 @@ function ResourceEventMonthRenderer() {
             
             segments.forEach(function(segment, segmentIndex) {
 
-                var divForResource = t.getCellForDateAndResource(segment.date, segmentIndex);
+                var divForResource = t.getCellForDateAndResource(segment.date, segment.resourceIndex);
                         
                 if (divForResource.length > 0) {
                     var resourceBookingDivTable = $('<div></div>');
@@ -64,14 +64,30 @@ function ResourceEventMonthRenderer() {
         
         if (event.resources instanceof Array) {
         
-            event.resources.forEach(function(resource, resourceIndex) {
-                segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate));
+            event.resources.forEach(function(resource) { // wauhdfiasdnp iucfnapsubnvapdsfiunvb paefinv
+                
+                var resourceIndex = getResourceIndexFromId(resource, t.calendar.options.resources);
+                console.info("resource:" + resource +"; index:"+resourceIndex);
+                if (resourceIndex > -1) {
+                    segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate));
+                }
             });
             
         } else {
-            segments = segments.concat(createSegmentsForResource(event.resources, 0, numDays, mStart, mEnd, startDate));
+            var resourceIndex = getResourceIndexFromId(event.resources, t.calendar.options.resources);
+            segments = segments.concat(createSegmentsForResource(event.resources, resourceIndex, numDays, mStart, mEnd, startDate));
         }
         return segments;
+    }
+    
+    function getResourceIndexFromId(resourceId, list) {
+        var result = -1;
+        list.forEach(function(resource,resourceIndex) {
+            if (resourceId == resource.id) {
+                result = resourceIndex;
+            }
+        });
+        return result;
     }
     
     function createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate) {
