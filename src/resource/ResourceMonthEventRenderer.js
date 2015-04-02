@@ -71,15 +71,22 @@ function ResourceEventMonthRenderer() {
         }
         var startDate = moment(mStart).startOf('day');
         
-        if (event.resources instanceof Array) {
-        
-            event.resources.forEach(function(resource) {
+        if(event.resources.length === 0) {
+            // resources property on event is not specified, assume event uses all resources!
+            t.calendar.options.resources.forEach(function(resource, resourceIndex) {
                 
-                var resourceIndex = getResourceIndexFromId(resource, t.calendar.options.resources);
                 //console.info("resource:" + resource +"; index:"+resourceIndex);
                 if (resourceIndex > -1) {
                     segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate, event.allDay));
                 }
+                
+            });
+            
+        } else
+        if (event.resources instanceof Array) {
+        
+            event.resources.forEach(function(resource, resourceIndex) {
+                segments = segments.concat(createSegmentsForResource(resource, resourceIndex, numDays, mStart, mEnd, startDate, event.allDay));
             });
             
         } else {

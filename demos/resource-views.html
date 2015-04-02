@@ -46,9 +46,9 @@
         header: {
           left: 'prev,next today',
           center: 'title',
-          right: 'month,agendaWeek,resourceDay, resourceMonth'
+          right: 'month,agendaWeek,resourceDay,resourceMonth'
         },
-        defaultView: 'resourceDay',
+        defaultView: 'resourceMonth',
         editable: true,
         droppable: true,
         resources: [
@@ -77,22 +77,22 @@
             title: 'R1-R2: Lunch 12.15-14.45',
             start: new Date(y, m, d, 12, 15),
             end: new Date(y, m, d, 14, 45),
-            color: 'black',
-            allDay: false,
-            resources: ['resource1', 'resource2']
+            color: '#C22326',
+            allDay: false /*,
+            resources: ['resource1', 'resource2'] */
           },
           {
             title: 'R1: All day',
             start: new Date(y, m, d, 10, 30),
             end: new Date(y, m, d, 11, 0),
-            color: 'black',
+            color: '#F37338',
             allDay: true,
             resources: 'resource1'
           },
           {
             title: 'R2: Meeting 11.00',
             start: new Date(y, m, d, 11, 0),
-            color: 'black',
+            color: '#FDB632',
             allDay: true,
             resources: 'resource2'
           },
@@ -100,7 +100,7 @@
             title: 'R1/R2: Lunch 12-14',
             start: new Date(y, m, d, 12, 0),
             end: new Date(y, m, d, 14, 0),
-            color: 'black',
+            color: '#027878',
             allDay: false,
             resources: ['resource1', 'resource2']
           },
@@ -109,7 +109,7 @@
             title: 'R1: Lunch',
             start: new Date(y, m, d, 12, 0),
             end: new Date(y, m, d, 14, 0),
-            color: 'black',
+            color: '#801638',
             allDay: false,
             resources: ['resource1']
           },
@@ -117,7 +117,7 @@
             title: 'R3: Breakfast',
             start: new Date(y, m, d, 8, 0),
             end: new Date(y, m, d, 8, 30),
-            color: 'black',
+            color: '#EBC137',
             allDay: false,
             resources: ['resource3']
           },
@@ -125,7 +125,7 @@
             id: 999,
             title: 'Repeating Event',
             start: new Date(y, m, d - 3, 16, 0),
-            color: 'black',
+            color: '#E38C2D',
             allDay: false,
             resources: 'resource2'
           },
@@ -133,7 +133,7 @@
             id: 999,
             title: 'Repeating Event',
             start: new Date(y, m, d + 4, 16, 0),
-            color: 'black',
+            color: '#DB4C2C',
             allDay: false,
             resources: 'resource2'
           }
